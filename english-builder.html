@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Каркаси англійського речення</title>
+<style>
+:root{
+  --bg:#f6f5f2; --card:#ffffff; --fg:#1b1b1a; --muted:#6b6a66;
+  --line:#e0ded8; --accent:#1f6f54; --accent-soft:#e3f0ea; --warn:#8a5a1f;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#15161a; --card:#1e2026; --fg:#e8e7e3; --muted:#9a9a95;
+    --line:#2e3138; --accent:#5cc49b; --accent-soft:#1d2f29; --warn:#d6a35c;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#15161a; --card:#1e2026; --fg:#e8e7e3; --muted:#9a9a95;
+  --line:#2e3138; --accent:#5cc49b; --accent-soft:#1d2f29; --warn:#d6a35c;
+  color-scheme: dark;
+}
+*{box-sizing:border-box}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{
+  margin:0; background:var(--bg); color:var(--fg);
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  font-size:17px; line-height:1.5;
+}
+.wrap{max-width:720px;margin:0 auto;padding:0 14px 60px}
+header{padding:18px 0 10px}
+h1{font-size:20px;margin:0 0 4px;letter-spacing:-0.01em}
+.sub{color:var(--muted);font-size:14px;margin:0}
+nav{display:flex;gap:6px;margin:14px 0 18px;overflow-x:auto;-webkit-overflow-scrolling:touch}
+nav button{
+  flex:0 0 auto;border:1px solid var(--line);background:var(--card);color:var(--fg);
+  padding:9px 14px;border-radius:999px;font-size:14px;cursor:pointer;font-family:inherit;
+}
+nav button[aria-selected="true"]{background:var(--accent);border-color:var(--accent);color:#fff}
+.card{
+  background:var(--card);border:1px solid var(--line);border-radius:14px;
+  padding:16px;margin-bottom:12px;
+}
+.ua{font-size:17px;margin:0 0 10px}
+.en{font-size:19px;margin:0;color:var(--accent);font-weight:600;letter-spacing:-0.01em}
+.hidden{display:none}
+.tap{
+  width:100%;border:1px dashed var(--line);background:transparent;color:var(--muted);
+  padding:12px;border-radius:10px;font-size:15px;cursor:pointer;font-family:inherit;
+}
+.frame{font-size:20px;font-weight:700;margin:0 0 4px;color:var(--fg);letter-spacing:-0.02em}
+.frame small{display:block;font-weight:400;font-size:14px;color:var(--muted);margin-top:2px}
+ul.vars{list-style:none;padding:0;margin:12px 0 0}
+ul.vars li{padding:8px 0;border-top:1px solid var(--line);font-size:16px}
+ul.vars li span{display:block;color:var(--muted);font-size:13px;margin-top:2px}
+.row{display:flex;gap:8px;margin-top:14px}
+.row button{
+  flex:1;padding:11px;border-radius:10px;font-size:15px;cursor:pointer;
+  border:1px solid var(--line);background:var(--card);color:var(--fg);font-family:inherit;
+}
+.row button.ok{border-color:var(--accent);color:var(--accent)}
+.bar{height:4px;background:var(--line);border-radius:4px;overflow:hidden;margin:4px 0 16px}
+.bar i{display:block;height:100%;background:var(--accent);width:0%}
+.counter{color:var(--muted);font-size:13px;margin:0 0 6px}
+table{width:100%;border-collapse:collapse;font-size:15px}
+td{padding:8px 6px;border-bottom:1px solid var(--line);vertical-align:top}
+td:first-child{font-weight:600;white-space:nowrap;padding-right:12px}
+.slot{display:flex;gap:6px;flex-wrap:wrap;margin:10px 0 14px}
+.slot div{
+  flex:1;min-width:90px;background:var(--accent-soft);border-radius:8px;
+  padding:9px;text-align:center;font-size:13px;color:var(--fg)
+}
+.slot div b{display:block;font-size:15px;margin-bottom:2px}
+.note{color:var(--muted);font-size:14px;margin:10px 0 0}
+.theme{position:fixed;right:12px;bottom:calc(12px + env(safe-area-inset-bottom,0px));
+  border:1px solid var(--line);background:var(--card);color:var(--muted);
+  border-radius:999px;padding:8px 12px;font-size:13px;cursor:pointer;font-family:inherit}
+h2{font-size:16px;margin:22px 0 8px}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+  <h1>Каркаси англійського речення</h1>
+  <p class="sub">10 хвилин щодня. Промовляти вголос, не читати очима.</p>
+</header>
+
+<nav id="nav">
+  <button data-tab="frames" aria-selected="true">Каркаси</button>
+  <button data-tab="drill" aria-selected="false">Збери речення</button>
+  <button data-tab="ref" aria-selected="false">Схема</button>
+</nav>
+
+<section id="frames"></section>
+
+<section id="drill" class="hidden">
+  <p class="counter" id="dcount"></p>
+  <div class="bar"><i id="dbar"></i></div>
+  <div class="card">
+    <p class="ua" id="dua"></p>
+    <button class="tap" id="dreveal">Сказав уголос — показати відповідь</button>
+    <p class="en hidden" id="den"></p>
+    <p class="note hidden" id="dhint"></p>
+    <div class="row hidden" id="drow">
+      <button id="dbad">Не вгадав</button>
+      <button class="ok" id="dgood">Вгадав</button>
+    </div>
+  </div>
+  <button class="tap" id="dreset">Почати заново</button>
+</section>
+
+<section id="ref" class="hidden">
+  <div class="card">
+    <p class="frame">Порядок слів<small>Міняти не можна. Це замінює відмінки.</small></p>
+    <div class="slot">
+      <div><b>ХТО</b>I</div>
+      <div><b>ДІЯ</b>checked</div>
+      <div><b>ЩО</b>the documents</div>
+      <div><b>ДЕ</b>at work</div>
+      <div><b>КОЛИ</b>yesterday</div>
+    </div>
+    <p class="note">Українською «Вчора я на роботі перевірив документи» — можна як завгодно. Англійською — ні. Якщо збиваєтесь, промовте спершу українською в цьому порядку, потім перекладіть.</p>
+  </div>
+
+  <h2>30 службових слів, які все склеюють</h2>
+  <div class="card">
+    <table>
+      <tr><td>be (am/is/are/was/were)</td><td>стан, хто/що є ким/яким</td></tr>
+      <tr><td>do / does / did</td><td>питання та заперечення</td></tr>
+      <tr><td>have / has / had</td><td>мати; завершена дія</td></tr>
+      <tr><td>will</td><td>майбутнє</td></tr>
+      <tr><td>can / could</td><td>могти</td></tr>
+      <tr><td>must / have to</td><td>мусити</td></tr>
+      <tr><td>to</td><td>перед другим дієсловом: need <i>to</i> go</td></tr>
+      <tr><td>in / on / at</td><td>місце й час</td></tr>
+      <tr><td>the / a</td><td>відомий / будь-який предмет</td></tr>
+      <tr><td>of / for / with</td><td>родовий, «для», «з»</td></tr>
+    </table>
+    <p class="note">Поки ці слова не стануть автоматичними, речення не склеюватиметься — скільки б іменників ви не вивчили.</p>
+  </div>
+
+  <h2>Три правила, що ламають більшість речень</h2>
+  <div class="card">
+    <table>
+      <tr><td>1</td><td>Дієслово ніколи не зникає. «Він лікар» → He <b>is</b> a doctor.</td></tr>
+      <tr><td>2</td><td>Підмет ніколи не зникає. «Холодно» → <b>It</b> is cold.</td></tr>
+      <tr><td>3</td><td>Одне заперечення. «Я нічого не бачив» → I did<b>n't</b> see <b>anything</b>.</td></tr>
+    </table>
+  </div>
+</section>
+
+<button class="theme" id="theme">Тема</button>
+</div>
+
+<script>
+const FRAMES = [
+  {f:"I need to ...", t:"мені треба / я маю зробити", v:[
+    ["I need to finish this today.","Мені треба закінчити це сьогодні."],
+    ["I need to check the documents.","Мені треба перевірити документи."],
+    ["I need to call him first.","Спершу мені треба йому подзвонити."],
+    ["I don't need to go there.","Мені не треба туди їхати."],
+    ["Do I need to sign it?","Мені треба це підписати?"]]},
+  {f:"I have to ...", t:"я мушу (обставини змушують)", v:[
+    ["I have to work on Saturday.","Я мушу працювати в суботу."],
+    ["I had to stay late.","Мені довелося затриматись."],
+    ["You don't have to answer.","Тобі не обов'язково відповідати."],
+    ["We have to find another way.","Ми мусимо знайти інший спосіб."]]},
+  {f:"I'm going to ...", t:"я збираюся (план)", v:[
+    ["I'm going to buy a car.","Я збираюся купити авто."],
+    ["I'm going to talk to him tomorrow.","Я поговорю з ним завтра."],
+    ["We're going to start next week.","Ми почнемо наступного тижня."],
+    ["I'm not going to wait.","Я не збираюся чекати."]]},
+  {f:"There is / There are ...", t:"є, існує, наявне", v:[
+    ["There is a problem with the order.","Із замовленням є проблема."],
+    ["There are two boxes left.","Залишилось дві коробки."],
+    ["There isn't enough space.","Місця недостатньо."],
+    ["Is there anything else?","Є ще щось?"]]},
+  {f:"Can you ... ?", t:"прохання", v:[
+    ["Can you send me the file?","Можеш надіслати мені файл?"],
+    ["Can you explain it again?","Можеш пояснити ще раз?"],
+    ["Could you help me with this?","Не міг би ти мені з цим допомогти?"],
+    ["I can't open it.","Я не можу це відкрити."]]},
+  {f:"I think (that) ...", t:"я думаю, вважаю", v:[
+    ["I think it's a good idea.","Думаю, це хороша ідея."],
+    ["I think we should wait.","Думаю, нам варто зачекати."],
+    ["I don't think it will work.","Не думаю, що це спрацює."],
+    ["I thought you knew.","Я думав, ти знаєш."]]},
+  {f:"I'm trying to ...", t:"я намагаюся", v:[
+    ["I'm trying to understand it.","Я намагаюся це зрозуміти."],
+    ["I'm trying to fix the problem.","Я намагаюся виправити проблему."],
+    ["I tried to call you.","Я намагався тобі додзвонитись."]]},
+  {f:"It takes ...", t:"це займає (час)", v:[
+    ["It takes about an hour.","Це займає близько години."],
+    ["It took me three days.","Це зайняло в мене три дні."],
+    ["How long does it take?","Скільки це займає часу?"]]},
+  {f:"I used to ...", t:"раніше я (а тепер ні)", v:[
+    ["I used to live in another city.","Раніше я жив в іншому місті."],
+    ["I used to work there.","Раніше я там працював."],
+    ["I didn't use to like it.","Раніше мені це не подобалось."]]},
+  {f:"Have you ever ... ?", t:"ти колись...?", v:[
+    ["Have you ever been to Poland?","Ти колись був у Польщі?"],
+    ["Have you ever used this program?","Ти колись користувався цією програмою?"],
+    ["I've never seen it before.","Я ніколи цього раніше не бачив."]]},
+  {f:"If ..., I will ...", t:"якщо — то", v:[
+    ["If I have time, I will do it.","Якщо матиму час, я це зроблю."],
+    ["If it rains, we'll stay home.","Якщо буде дощ, залишимось удома."],
+    ["If you need help, just tell me.","Якщо потрібна допомога — просто скажи."]]},
+  {f:"That's why ... / because ...", t:"причина й наслідок", v:[
+    ["I was late because of the traffic.","Я запізнився через затори."],
+    ["That's why I called you.","Ось чому я тобі подзвонив."],
+    ["I did it because it was necessary.","Я зробив це, бо це було потрібно."]]},
+  {f:"I'd like to ...", t:"я хотів би (ввічливо)", v:[
+    ["I'd like to ask you something.","Я хотів би дещо спитати."],
+    ["I'd like to know more about it.","Я хотів би дізнатися про це більше."],
+    ["Would you like some coffee?","Хочеш кави?"]]},
+  {f:"It depends on ...", t:"залежить від", v:[
+    ["It depends on the weather.","Залежить від погоди."],
+    ["It depends on how much time I have.","Залежить від того, скільки в мене часу."]]},
+  {f:"I'm not sure, but ...", t:"пом'якшення, виграш часу", v:[
+    ["I'm not sure, but I think it's correct.","Не впевнений, але думаю, що правильно."],
+    ["As far as I know, it's still open.","Наскільки я знаю, воно ще відкрите."],
+    ["Let me check and tell you later.","Дай перевірю і скажу пізніше."]]}
+];
+
+const DRILL = [
+  ["Я працюю тут три роки.","I have worked here for three years.","Період до тепер — have + V3, не present simple."],
+  ["Мені треба перевірити документи перед відправкою.","I need to check the documents before sending them.","Після прийменника before — дієслово на -ing."],
+  ["Вчора я був на роботі весь день.","I was at work all day yesterday.","«Вчора» — у кінець, не на початок."],
+  ["У мене немає часу зараз.","I don't have time now.","Одне заперечення: don't + have."],
+  ["Він сказав, що приїде завтра.","He said he would come tomorrow.","Після said у минулому — would, не will."],
+  ["Це залежить від того, скільки це коштує.","It depends on how much it costs.","Після depends завжди on."],
+  ["Я ніколи про це не чув.","I have never heard about it.","never вже заперечення — not не треба."],
+  ["Скільки часу це займе?","How long will it take?","take — «займати час», не need."],
+  ["Мені подобається ця ідея.","I like this idea.","Англійською «я люблю», не «мені подобається»."],
+  ["Холодно.","It's cold.","Підмет it обов'язковий."],
+  ["Він лікар.","He is a doctor.","is і a не зникають."],
+  ["Я не знаю, де вона.","I don't know where she is.","У підрядному — прямий порядок, не питальний."],
+  ["Я тут уже дві години.","I have been here for two hours.","for — тривалість."],
+  ["Ми почали це минулого тижня.","We started it last week.","Минуле з точною датою — past simple."],
+  ["Я збираюся поговорити з керівником.","I'm going to talk to my manager.","talk to, не talk with у цьому значенні."],
+  ["Можеш надіслати мені це на пошту?","Can you send it to me by email?","Порядок: send + що + to кому."],
+  ["Там було занадто багато людей.","There were too many people.","many — для злічуваних."],
+  ["Я не впевнений, що це правильно.","I'm not sure it's correct.","sure — прикметник, потрібне am."],
+  ["Я звик вставати рано.","I'm used to getting up early.","be used to + -ing — звичка; used to + V1 — минуле."],
+  ["Я попросив його допомогти.","I asked him to help.","ask somebody to do."],
+  ["Це найкраще, що я бачив.","It's the best thing I have ever seen.","the перед найвищим ступенем."],
+  ["У мене болить голова.","I have a headache.","have, а не be."],
+  ["Мені двадцять сім років.","I'm twenty-seven.","вік через be, не have."],
+  ["Я чекаю на відповідь.","I'm waiting for an answer.","wait for."],
+  ["Вона працює в лікарні.","She works at a hospital.","третя особа — works."],
+  ["Я цього не робив.","I didn't do it.","did + do, обидва потрібні."],
+  ["Ти вже закінчив?","Have you finished yet?","yet — у питанні в кінці."],
+  ["Я прийду, якщо встигну.","I'll come if I have time.","після if — теперішній час, не will."],
+  ["Це не моя відповідальність.","It's not my responsibility.","присвійний займенник, без of."],
+  ["Можна мені ще один?","Can I have another one?","have, а не take."]
+];
+
+function el(id){return document.getElementById(id)}
+
+// --- Frames tab ---
+const fc = el('frames');
+FRAMES.forEach((fr,i)=>{
+  const d = document.createElement('div');
+  d.className='card';
+  d.innerHTML = `<p class="frame">${fr.f}<small>${fr.t}</small></p>
+  <button class="tap">Показати варіанти</button>
+  <ul class="vars hidden">${fr.v.map(x=>`<li>${x[0]}<span>${x[1]}</span></li>`).join('')}</ul>`;
+  const btn = d.querySelector('.tap'), list = d.querySelector('.vars');
+  btn.onclick = ()=>{ list.classList.toggle('hidden');
+    btn.textContent = list.classList.contains('hidden') ? 'Показати варіанти' : 'Промовте кожен рядок уголос 3 рази'; };
+  fc.appendChild(d);
+});
+
+// --- Drill tab ---
+let order = [], idx = 0, right = 0;
+function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a}
+function startDrill(){
+  order = shuffle(DRILL.map((_,i)=>i)); idx = 0; right = 0; showCard();
+}
+function showCard(){
+  if(idx >= order.length){
+    el('dua').textContent = `Готово. Правильних: ${right} з ${order.length}.`;
+    el('dreveal').classList.add('hidden'); el('den').classList.add('hidden');
+    el('dhint').classList.add('hidden'); el('drow').classList.add('hidden');
+    el('dcount').textContent=''; el('dbar').style.width='100%';
+    try{localStorage.setItem('eb_last', String(right));}catch(e){}
+    return;
+  }
+  const q = DRILL[order[idx]];
+  el('dua').textContent = q[0];
+  el('den').textContent = q[1];
+  el('dhint').textContent = q[2];
+  el('dreveal').classList.remove('hidden');
+  el('den').classList.add('hidden'); el('dhint').classList.add('hidden');
+  el('drow').classList.add('hidden');
+  el('dcount').textContent = `${idx+1} / ${order.length}`;
+  el('dbar').style.width = (idx/order.length*100)+'%';
+}
+el('dreveal').onclick = ()=>{
+  el('den').classList.remove('hidden'); el('dhint').classList.remove('hidden');
+  el('drow').classList.remove('hidden'); el('dreveal').classList.add('hidden');
+};
+el('dgood').onclick = ()=>{ right++; idx++; showCard(); };
+el('dbad').onclick = ()=>{ order.push(order[idx]); idx++; showCard(); };
+el('dreset').onclick = startDrill;
+startDrill();
+
+// --- Tabs ---
+const tabs = ['frames','drill','ref'];
+document.querySelectorAll('#nav button').forEach(b=>{
+  b.onclick = ()=>{
+    document.querySelectorAll('#nav button').forEach(x=>x.setAttribute('aria-selected','false'));
+    b.setAttribute('aria-selected','true');
+    tabs.forEach(t=>el(t).classList.toggle('hidden', t !== b.dataset.tab));
+    window.scrollTo(0,0);
+    try{localStorage.setItem('eb_tab', b.dataset.tab);}catch(e){}
+  };
+});
+try{
+  const t = localStorage.getItem('eb_tab');
+  if(t && tabs.includes(t)) document.querySelector(`#nav button[data-tab="${t}"]`).click();
+}catch(e){}
+
+// --- Theme ---
+el('theme').onclick = ()=>{
+  const cur = document.documentElement.getAttribute('data-theme');
+  const next = cur === 'dark' ? 'light' : 'dark';
+  document.documentElement.setAttribute('data-theme', next);
+  try{localStorage.setItem('eb_theme', next);}catch(e){}
+};
+try{
+  const th = localStorage.getItem('eb_theme');
+  if(th) document.documentElement.setAttribute('data-theme', th);
+}catch(e){}
+</script>
+</body>
+</html>

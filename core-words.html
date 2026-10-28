@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Ядро: 239 слів</title>
+<style>
+:root{
+  --bg:#f6f5f2; --card:#fff; --fg:#1b1b1a; --muted:#6b6a66;
+  --line:#e0ded8; --accent:#1f6f54; --soft:#e3f0ea; --red:#9b3b2f;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#15161a;--card:#1e2026;--fg:#e8e7e3;--muted:#9a9a95;
+    --line:#2e3138;--accent:#5cc49b;--soft:#1d2f29;--red:#d98070;color-scheme:dark;}
+}
+:root[data-theme="dark"]{
+  --bg:#15161a;--card:#1e2026;--fg:#e8e7e3;--muted:#9a9a95;
+  --line:#2e3138;--accent:#5cc49b;--soft:#1d2f29;--red:#d98070;color-scheme:dark;}
+*{box-sizing:border-box}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--fg);font-size:17px;line-height:1.5;
+ font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif}
+.wrap{max-width:720px;margin:0 auto;padding:0 14px 70px}
+header{padding:18px 0 8px}
+h1{font-size:20px;margin:0 0 4px;letter-spacing:-0.01em}
+.sub{color:var(--muted);font-size:14px;margin:0}
+nav{display:flex;gap:6px;margin:14px 0 16px;overflow-x:auto}
+nav button{flex:0 0 auto;border:1px solid var(--line);background:var(--card);color:var(--fg);
+ padding:9px 14px;border-radius:999px;font-size:14px;cursor:pointer;font-family:inherit}
+nav button[aria-selected="true"]{background:var(--accent);border-color:var(--accent);color:#fff}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px;margin-bottom:12px}
+.ua{font-size:24px;font-weight:600;margin:0 0 4px;letter-spacing:-0.02em}
+.pos{color:var(--muted);font-size:13px;margin:0 0 14px;text-transform:uppercase;letter-spacing:.05em}
+.en{font-size:26px;font-weight:700;color:var(--accent);margin:0 0 6px;letter-spacing:-0.02em}
+.ex{font-size:17px;margin:0;color:var(--fg)}
+.ex b{font-weight:700}
+.hidden{display:none}
+.tap{width:100%;border:1px dashed var(--line);background:transparent;color:var(--muted);
+ padding:14px;border-radius:10px;font-size:15px;cursor:pointer;font-family:inherit}
+.row{display:flex;gap:8px;margin-top:16px}
+.row button{flex:1;padding:12px;border-radius:10px;font-size:15px;cursor:pointer;
+ border:1px solid var(--line);background:var(--card);color:var(--fg);font-family:inherit}
+.row button.ok{border-color:var(--accent);color:var(--accent)}
+.row button.no{border-color:var(--red);color:var(--red)}
+.bar{height:5px;background:var(--line);border-radius:5px;overflow:hidden;margin:2px 0 14px}
+.bar i{display:block;height:100%;background:var(--accent);width:0%;transition:width .2s}
+.counter{color:var(--muted);font-size:13px;margin:0 0 6px;display:flex;justify-content:space-between}
+h2{font-size:15px;margin:20px 0 8px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em}
+ul{list-style:none;padding:0;margin:0}
+li{display:flex;gap:10px;padding:9px 0;border-bottom:1px solid var(--line);font-size:16px;align-items:baseline}
+li .w{font-weight:600;min-width:120px}
+li .t{color:var(--muted);font-size:14px}
+li.done .w{color:var(--accent)}
+.big{font-size:38px;font-weight:700;margin:0;letter-spacing:-0.03em}
+.note{color:var(--muted);font-size:14px;margin:12px 0 0}
+.theme{position:fixed;right:12px;bottom:calc(12px + env(safe-area-inset-bottom,0px));
+ border:1px solid var(--line);background:var(--card);color:var(--muted);border-radius:999px;
+ padding:8px 12px;font-size:13px;cursor:pointer;font-family:inherit}
+.warn{background:var(--soft);border-radius:10px;padding:12px;font-size:15px;margin-top:14px}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+  <h1>Ядро: 239 слів</h1>
+  <p class="sub">Українська → англійська, вголос. 10 слів на день.</p>
+</header>
+
+<nav id="nav">
+  <button data-tab="day" aria-selected="true">Сьогодні</button>
+  <button data-tab="list" aria-selected="false">Список</button>
+  <button data-tab="stat" aria-selected="false">Прогрес</button>
+</nav>
+
+<section id="day">
+  <p class="counter"><span id="c1"></span><span id="c2"></span></p>
+  <div class="bar"><i id="bar"></i></div>
+  <div class="card" id="cardbox">
+    <p class="ua" id="qua"></p>
+    <p class="pos" id="qpos"></p>
+    <button class="tap" id="reveal">Сказав уголос — перевірити</button>
+    <div class="hidden" id="ans">
+      <p class="en" id="qen"></p>
+      <p class="ex" id="qex"></p>
+    </div>
+    <div class="row hidden" id="row">
+      <button class="no" id="bad">Не знав</button>
+      <button class="ok" id="good">Знав</button>
+    </div>
+  </div>
+  <button class="tap" id="more">Ще 10 слів</button>
+</section>
+
+<section id="list" class="hidden"></section>
+
+<section id="stat" class="hidden">
+  <div class="card">
+    <p class="big" id="sbig">0 / 250</p>
+    <div class="bar"><i id="sbar"></i></div>
+    <p class="note">Слово вважається вивченим, коли ви 2 рази поспіль витягли його з української без підказки.</p>
+  </div>
+  <div class="card">
+    <p class="note" style="margin:0">Темп: 10 слів на день — це 239 слів приблизно за 24 дні. Далі переходьте на другу тисячу Oxford 3000, але тільки після того, як ці слова виходять без паузи.</p>
+  </div>
+  <button class="tap" id="wipe">Скинути прогрес</button>
+</section>
+
+<button class="theme" id="theme">Тема</button>
+</div>
+
+<script>
+const W = [
+["дієслова",[
+["бути","be","It is here. I was at work."],
+["мати","have","I have time. I had a problem."],
+["робити","do","I do it every day. I didn't do it."],
+["казати","say","He says nothing. She said yes."],
+["йти, їхати","go","I go to work. He went home."],
+["отримати, стати","get","I got your message. It gets cold."],
+["робити, виготовляти","make","She made coffee. Make a decision."],
+["знати","know","I know him. I didn't know that."],
+["думати","think","I think so. I thought you knew."],
+["брати","take","Take this. It takes an hour."],
+["бачити","see","I see the problem. I saw him yesterday."],
+["приходити","come","Come here. He came late."],
+["хотіти","want","I want to help. I don't want it."],
+["дивитися (на)","look","Look at this. It looks good."],
+["використовувати","use","I use it daily. I used the old one."],
+["знаходити","find","I can't find it. I found the file."],
+["давати","give","Give me a minute. He gave me the key."],
+["казати комусь","tell","Tell me more. He told me the truth."],
+["працювати","work","I work here. It doesn't work."],
+["дзвонити; називати","call","Call me later. They called it off."],
+["намагатися","try","I'll try again. I tried to call you."],
+["питати; просити","ask","Ask him. I asked him to help."],
+["потребувати","need","I need help. You don't need to go."],
+["відчувати","feel","I feel better. I felt tired."],
+["ставати","become","It became clear. He became a doctor."],
+["залишати; їхати","leave","He left yesterday. Leave it here."],
+["класти","put","Put it here. I put it back."],
+["означати","mean","What does it mean? I meant it."],
+["тримати; зберігати","keep","Keep it simple. Keep the receipt."],
+["дозволяти","let","Let me check. Let him go."],
+["починати","start","Let's start. It started at six."],
+["здаватися","seem","It seems fine. He seemed angry."],
+["допомагати","help","Can you help? He helped me."],
+["говорити","talk","We talked about it. Talk to him."],
+["повертати; вмикати","turn","Turn it off. Turn left."],
+["показувати","show","Show me. He showed me how."],
+["чути","hear","I hear you. I heard about it."],
+["грати","play","I play games. We played together."],
+["бігти; керувати","run","He runs the office. I ran there."],
+["рухати(ся); переїжджати","move","We moved it. They moved away."],
+["жити","live","I live here. He lived abroad."],
+["вірити","believe","I believe you. I didn't believe it."],
+["приносити","bring","Bring the file. He brought it."],
+["ставатися","happen","What happened? It happens."],
+["писати","write","I wrote to him. Write it down."],
+["втрачати","lose","Don't lose it. I lost my keys."],
+["платити","pay","I paid for it. Who pays?"],
+["зустрічати","meet","We met last week. Nice to meet you."],
+["продовжувати","continue","Continue later. It continued."],
+["вчити(ся)","learn","I'm learning English. I learned a lot."],
+["змінювати","change","Change the password. It changed."],
+["розуміти","understand","I understand. I didn't understand."],
+["дивитися (фільм)","watch","I watch it online. We watched it."],
+["слідувати","follow","Follow me. He followed the rules."],
+["зупиняти(ся)","stop","Stop here. It stopped working."],
+["створювати","create","I created a file. It creates problems."],
+["розмовляти","speak","I don't speak well. He spoke slowly."],
+["читати","read","I read documentation. I read it twice."],
+["витрачати","spend","I spent two hours. He spends a lot."],
+["відкривати","open","Open the door. It's open."],
+["купувати","buy","I bought a car. Where did you buy it?"],
+["чекати","wait","Wait a minute. I waited an hour."],
+["надсилати","send","Send it to me. I sent an email."],
+["залишатися","stay","Stay here. I stayed home."],
+["перевіряти","check","Check the documents. I checked it."],
+["вибирати","choose","Choose one. I chose this one."],
+["водити (авто)","drive","I drive to work. He drove me home."],
+["ламати(ся)","break","It broke. Don't break it."],
+["сподіватися","hope","I hope so. I hoped for more."],
+["вирішувати","decide","I decided to go. You decide."],
+["повертатися","return","He returned home. Return it tomorrow."],
+["пояснювати","explain","Explain it again. He explained everything."],
+["погоджуватися","agree","I agree. I don't agree with that."],
+["приймати","accept","I accept it. He accepted the offer."],
+["готувати","prepare","Prepare the report. I prepared it."],
+["закінчувати","finish","I finished it. Have you finished?"],
+["лагодити, виправляти","fix","Fix the problem. I fixed it."],
+["зберігати; рятувати","save","Save the file. It saved me time."],
+["закривати","close","Close the door. It closes at six."],
+["відповідати","answer","Answer me. He answered quickly."],
+["замовляти","order","I ordered it. Order two boxes."],
+["памʼятати","remember","I remember that. Remember to call."],
+["забувати","forget","I forgot. Don't forget it."],
+["пропонувати","offer","They offered me a job. I offered help."],
+["дозволяти (офіційно)","allow","It's not allowed. They allowed it."],
+["здаватися, виглядати","look like","It looks like rain. He looks like his father."]
+]],
+["іменники",[
+["час","time","I don't have time. It takes time."],
+["рік","year","Last year. Three years ago."],
+["день","day","Every day. The next day."],
+["тиждень","week","Last week. In two weeks."],
+["місяць","month","Next month. Two months ago."],
+["людина; людей","person / people","Many people. One person."],
+["річ, штука","thing","One more thing. Things change."],
+["спосіб; шлях","way","Another way. On the way home."],
+["робота (загалом)","work","A lot of work. At work."],
+["робота (посада)","job","A good job. I lost my job."],
+["місце","place","A nice place. In the first place."],
+["дім, додому","home","I'm at home. I went home."],
+["кімната","room","In the room. There's no room."],
+["автомобіль","car","I bought a car. By car."],
+["гроші","money","I need money. It costs money."],
+["вода","water","A glass of water. Hot water."],
+["їжа","food","Good food. Buy some food."],
+["імʼя","name","What's your name? My name is..."],
+["число, кількість","number","A large number. Phone number."],
+["проблема","problem","No problem. We have a problem."],
+["питання","question","A good question. Ask a question."],
+["рука","hand","In my hand. Give me a hand."],
+["голова","head","My head hurts. Head of department."],
+["сімʼя","family","My family. A family of four."],
+["друг","friend","A close friend. My friends."],
+["компанія, фірма","company","A big company. I work for a company."],
+["телефон","phone","On the phone. My phone is dead."],
+["файл, документ","file / document","Send me the file. Check the documents."],
+["слово","word","One word. In other words."],
+["група, команда","group / team","Our team. A small group."],
+["частина","part","Part of the job. The best part."],
+["кінець","end","At the end. The end of the month."],
+["країна","country","Another country. In this country."],
+["місто","city","A big city. In the city."],
+["дорога, вулиця","road / street","On the road. On this street."],
+["двері","door","Open the door. Next door."],
+["книга","book","A good book. Read a book."],
+["життя","life","My whole life. Life is hard."],
+["година","hour","Two hours. An hour ago."],
+["хвилина","minute","Wait a minute. Ten minutes."],
+["випадок, справа","case","In that case. A difficult case."],
+["причина","reason","The main reason. For some reason."],
+["результат","result","As a result. Good results."],
+["приклад","example","For example. A good example."],
+["ціна, вартість","price / cost","The price is high. It costs a lot."],
+["допомога","help","I need help. Thanks for your help."],
+["зміна","change","A big change. Any changes?"],
+["рівень","level","At this level. The next level."],
+["система","system","The whole system. A new system."],
+["програма","program","Run the program. A good program."],
+["обліковий запис","account","My account. Create an account."],
+["повідомлення","message","I got your message. Send a message."],
+["відео","video","Watch the video. A short video."],
+["гра","game","A good game. Play a game."],
+["здоровʼя","health","Good health. Health problems."],
+["лікар","doctor","See a doctor. He is a doctor."],
+["лікарня","hospital","In the hospital. Go to the hospital."],
+["бізнес, справа","business","A small business. On business."],
+["клієнт","customer","Our customers. A regular customer."],
+["послуга, обслуговування","service","Good service. Customer service."]
+]],
+["прикметники",[
+["хороший","good","A good idea. That's good."],
+["поганий","bad","A bad day. It's not bad."],
+["новий","new","A new car. Something new."],
+["старий","old","An old house. How old are you?"],
+["великий","big / large","A big problem. A large number."],
+["малий, маленький","small","A small room. A small amount."],
+["довгий","long","A long day. How long?"],
+["короткий","short","A short break. In short."],
+["високий","high","A high price. High quality."],
+["низький","low","A low price. Low level."],
+["ранній","early","Too early. An early start."],
+["пізній","late","I'm late. Late at night."],
+["легкий, простий","easy","That's easy. An easy job."],
+["важкий, складний","hard / difficult","It's hard. A difficult question."],
+["важливий","important","Very important. An important point."],
+["інший, різний","different","Something different. Different people."],
+["той самий","same","The same thing. At the same time."],
+["правильний","right / correct","You're right. The correct answer."],
+["неправильний","wrong","That's wrong. The wrong file."],
+["правда, істинний","true","Is it true? That's true."],
+["можливий","possible","Is it possible? As soon as possible."],
+["готовий","ready","I'm ready. Are you ready?"],
+["вільний; безкоштовний","free","I'm free today. It's free."],
+["зайнятий","busy","I'm busy. A busy day."],
+["повний","full","The box is full. Full time."],
+["порожній","empty","The room is empty. An empty box."],
+["зрозумілий, чистий","clear","Is it clear? Clear water."],
+["сильний","strong","A strong man. Strong coffee."],
+["слабкий","weak","A weak signal. I feel weak."],
+["гарячий","hot","Hot water. It's hot today."],
+["холодний","cold","Cold water. It's cold."],
+["швидкий","fast / quick","A fast car. A quick question."],
+["повільний","slow","A slow computer. Slow down."],
+["безпечний","safe","It's safe. A safe place."],
+["впевнений","sure","Are you sure? I'm not sure."],
+["дешевий","cheap","It's cheap. A cheap option."],
+["дорогий","expensive","Too expensive. An expensive car."],
+["наступний","next","Next week. The next one."],
+["останній, минулий","last","Last year. The last one."],
+["перший","first","The first time. First of all."],
+["найкращий","best","The best option. My best friend."]
+]],
+["службові",[
+["зараз","now","Not now. Right now."],
+["тоді, потім","then","See you then. And then?"],
+["сьогодні","today","Today is Monday. Not today."],
+["завтра","tomorrow","See you tomorrow. Tomorrow morning."],
+["вчора","yesterday","I saw him yesterday. Yesterday evening."],
+["завжди","always","I always do it. Always late."],
+["зазвичай","usually","I usually work. Usually not."],
+["часто","often","Not very often. How often?"],
+["іноді","sometimes","Sometimes I forget. Sometimes it helps."],
+["ніколи","never","I never said that. Never again."],
+["вже","already","I already did it. Are you here already?"],
+["все ще, досі","still","I'm still here. Still nothing."],
+["ще (в питаннях/запереченнях)","yet","Not yet. Have you finished yet?"],
+["щойно; просто","just","I just called him. Just a minute."],
+["майже","almost","Almost ready. Almost never."],
+["достатньо","enough","That's enough. Not enough time."],
+["занадто","too","Too much. Too late."],
+["дуже","very","Very good. Not very."],
+["справді","really","Really? I really like it."],
+["можливо","maybe / probably","Maybe later. He's probably right."],
+["звісно","of course","Of course not. Of course I will."],
+["знову","again","Try again. Not again."],
+["разом","together","We work together. All together."],
+["тут / там","here / there","Come here. Over there."],
+["все","everything","Everything is fine. That's everything."],
+["нічого","nothing","Nothing happened. Nothing else."],
+["щось / будь-що","something / anything","Something is wrong. Anything else?"],
+["хтось / ніхто","someone / nobody","Someone called. Nobody knows."],
+["також","also / too","I also think so. Me too."],
+["тільки","only","Only one. Only if you want."],
+["навіть","even","Even now. Even if it's late."],
+["натомість","instead","Do this instead. Instead of waiting."],
+["проте, однак","however","However, it's late. However you like."],
+["тому що","because","Because of the rain. Because I was busy."],
+["але","but","Slow but safe. But why?"],
+["отже, тому","so","So what? It was late, so I left."],
+["якщо","if","If you can. Only if necessary."],
+["коли","when","When you're ready. When did it happen?"],
+["поки, доки","while / until","Wait until Monday. While I was there."],
+["перед, до","before","Before work. The day before."],
+["після","after","After lunch. After that."],
+["між","between","Between us. Between two and three."],
+["під час","during","During the day. During the meeting."],
+["без","without","Without me. Without a doubt."],
+["про","about","About the order. What about it?"],
+["через (крізь)","through","Through the door. Through the window."],
+["над / під","over / under","Over there. Under the table."],
+["ніж (у порівнянні)","than","Better than before. More than enough."],
+["обидва / кожен","both / each","Both of them. Each one."],
+["кілька / багато","a few / many","A few days. Too many people."],
+["більшість","most","Most people. Most of the time."],
+["весь, усі","all","All day. All of them."]
+]]
+];
+
+const FLAT = [];
+W.forEach(([cat,items])=>items.forEach(it=>FLAT.push({ua:it[0],en:it[1],ex:it[2],cat})));
+const TOTAL = FLAT.length;
+
+let state = {};
+try{ state = JSON.parse(localStorage.getItem('cw_state')||'{}'); }catch(e){ state = {}; }
+function save(){ try{ localStorage.setItem('cw_state', JSON.stringify(state)); }catch(e){} }
+function learned(){ return FLAT.filter(w=>(state[w.en]||0)>=2).length; }
+
+let queue = [], qi = 0;
+function buildQueue(){
+  queue = FLAT.map((w,i)=>i).filter(i=>(state[FLAT[i].en]||0) < 2).slice(0,10);
+  qi = 0; render();
+}
+function el(id){return document.getElementById(id)}
+function render(){
+  if(qi >= queue.length){
+    el('cardbox').innerHTML = queue.length
+      ? '<p class="ua">Порція пройдена.</p><p class="note">Вивчено всього: '+learned()+' з '+TOTAL+'. Поверніться завтра — або беріть ще 10.</p>'
+      : '<p class="ua">Весь список пройдено.</p><p class="note">Переходьте на другу тисячу Oxford 3000.</p>';
+    el('c1').textContent=''; el('c2').textContent=''; el('bar').style.width='100%';
+    return;
+  }
+  const w = FLAT[queue[qi]];
+  el('cardbox').innerHTML = `<p class="ua">${w.ua}</p><p class="pos">${w.cat}</p>
+   <button class="tap" id="reveal">Сказав уголос — перевірити</button>
+   <div class="hidden" id="ans"><p class="en">${w.en}</p><p class="ex">${w.ex}</p></div>
+   <div class="row hidden" id="row"><button class="no" id="bad">Не знав</button><button class="ok" id="good">Знав</button></div>`;
+  el('reveal').onclick = ()=>{
+    el('ans').classList.remove('hidden'); el('row').classList.remove('hidden');
+    el('reveal').classList.add('hidden');
+  };
+  el('good').onclick = ()=>{ state[w.en] = (state[w.en]||0)+1; save(); qi++; render(); };
+  el('bad').onclick = ()=>{ state[w.en] = 0; save(); queue.push(queue[qi]); qi++; render(); };
+  el('c1').textContent = `${qi+1} / ${queue.length}`;
+  el('c2').textContent = `вивчено ${learned()} / ${TOTAL}`;
+  el('bar').style.width = (qi/queue.length*100)+'%';
+}
+el('more').onclick = buildQueue;
+buildQueue();
+
+// list
+function renderList(){
+  el('list').innerHTML = W.map(([cat,items])=>
+   `<h2>${cat}</h2><ul>${items.map(it=>
+     `<li class="${(state[it[1]]||0)>=2?'done':''}"><span class="w">${it[1]}</span><span class="t">${it[0]}</span></li>`
+   ).join('')}</ul>`).join('');
+}
+function renderStat(){
+  const n = learned();
+  el('sbig').textContent = `${n} / ${TOTAL}`;
+  el('sbar').style.width = (n/TOTAL*100)+'%';
+}
+el('wipe').onclick = ()=>{ state = {}; save(); buildQueue(); renderList(); renderStat(); };
+
+const tabs=['day','list','stat'];
+document.querySelectorAll('#nav button').forEach(b=>{
+  b.onclick=()=>{
+    document.querySelectorAll('#nav button').forEach(x=>x.setAttribute('aria-selected','false'));
+    b.setAttribute('aria-selected','true');
+    tabs.forEach(t=>el(t).classList.toggle('hidden', t!==b.dataset.tab));
+    if(b.dataset.tab==='list') renderList();
+    if(b.dataset.tab==='stat') renderStat();
+    window.scrollTo(0,0);
+  };
+});
+
+el('theme').onclick=()=>{
+  const cur=document.documentElement.getAttribute('data-theme');
+  const next=cur==='dark'?'light':'dark';
+  document.documentElement.setAttribute('data-theme',next);
+  try{localStorage.setItem('cw_theme',next);}catch(e){}
+};
+try{const th=localStorage.getItem('cw_theme'); if(th) document.documentElement.setAttribute('data-theme',th);}catch(e){}
+</script>
+</body>
+</html>
