@@ -106,12 +106,14 @@ li.done .w{color:var(--accent)}
   <div class="card">
     <p class="note" style="margin:0">Темп: 10 слів на день — це 239 слів приблизно за 24 дні. Далі переходьте на другу тисячу Oxford 3000, але тільки після того, як ці слова виходять без паузи.</p>
   </div>
+  <div class="card"><p class="note" id="sync" style="margin:0"></p></div>
   <button class="tap" id="wipe">Скинути прогрес</button>
 </section>
 
 <button class="theme" id="theme">Тема</button>
 </div>
 
+<script src="sync.js"></script>
 <script>
 const W = [
 ["дієслова",[
@@ -369,7 +371,7 @@ const TOTAL = FLAT.length;
 
 let state = {};
 try{ state = JSON.parse(localStorage.getItem('cw_state')||'{}'); }catch(e){ state = {}; }
-function save(){ try{ localStorage.setItem('cw_state', JSON.stringify(state)); }catch(e){} }
+function save(){ try{ localStorage.setItem('cw_state', JSON.stringify(state)); }catch(e){} if(window.Sync) Sync.changed(); }
 function learned(){ return FLAT.filter(w=>(state[w.en]||0)>=2).length; }
 
 let queue = [], qi = 0;
@@ -403,6 +405,14 @@ function render(){
 }
 el('more').onclick = buildQueue;
 buildQueue();
+if(window.Sync){
+  Sync.onStatus(s=>{ el('sync').textContent = Sync.configured() ? s : 'Прогрес зберігається лише в цьому браузері. Синхронізацію з GitHub можна налаштувати на головній сторінці.'; });
+  Sync.pull().then(fresh=>{
+    if(!fresh) return;
+    try{ state = JSON.parse(localStorage.getItem('cw_state')||'{}'); }catch(e){ state = {}; }
+    buildQueue(); renderList(); renderStat();
+  });
+}
 
 // list
 function renderList(){
@@ -416,7 +426,7 @@ function renderStat(){
   el('sbig').textContent = `${n} / ${TOTAL}`;
   el('sbar').style.width = (n/TOTAL*100)+'%';
 }
-el('wipe').onclick = ()=>{ state = {}; save(); buildQueue(); renderList(); renderStat(); };
+el('wipe').onclick = ()=>{ if(!confirm('Скинути весь прогрес? Це скине його й на GitHub.')) return; state = {}; save(); buildQueue(); renderList(); renderStat(); };
 
 const tabs=['day','list','stat'];
 document.querySelectorAll('#nav button').forEach(b=>{

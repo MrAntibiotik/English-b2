@@ -156,6 +156,7 @@ h2{font-size:16px;margin:22px 0 8px}
 <button class="theme" id="theme">Тема</button>
 </div>
 
+<script src="sync.js"></script>
 <script>
 const FRAMES = [
   {f:"I need to ...", t:"мені треба / я маю зробити", v:[
@@ -288,6 +289,7 @@ function showCard(){
     el('dhint').classList.add('hidden'); el('drow').classList.add('hidden');
     el('dcount').textContent=''; el('dbar').style.width='100%';
     try{localStorage.setItem('eb_last', String(right));}catch(e){}
+    if(window.Sync) Sync.changed();
     return;
   }
   const q = DRILL[order[idx]];
@@ -308,6 +310,7 @@ el('dgood').onclick = ()=>{ right++; idx++; showCard(); };
 el('dbad').onclick = ()=>{ order.push(order[idx]); idx++; showCard(); };
 el('dreset').onclick = startDrill;
 startDrill();
+if(window.Sync) Sync.pull();
 
 // --- Tabs ---
 const tabs = ['frames','drill','ref'];
